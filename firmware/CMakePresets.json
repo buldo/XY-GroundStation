@@ -1,0 +1,21 @@
+{
+    "version": 5,
+    "cmakeMinimumRequired": {
+      "major": 3,
+      "minor": 22,
+      "patch": 5
+    },
+    "configurePresets": [
+      {
+        "name": "default",
+        "displayName": "Default Config",
+        "description": "Default build using NMake Makefiles generator",
+        "generator": "NMake Makefiles",
+        "binaryDir": "${sourceDir}/build/default",
+        "cacheVariables": {
+          "CMAKE_BUILD_TYPE": "Debug",
+          "PICO_DEOPTIMIZED_DEBUG": "1"
+        }
+      }
+    ]
+  }

@@ -10,6 +10,6 @@
     "buldo:compilers/arm/gcc": "* 2022.11.2",
     "buldo:tools/kitware/cmake": "* 3.22.5",
     "buldo:raspberrypi/pico-sdk": "* 1.4.0",
-    "buldo:raspberrypi/pico-openocd": "* 0.12.0"
+    "buldo:raspberrypi/picoprobe-openocd": "* 0.12.0"
   }
 }

@@ -3,7 +3,8 @@
         {
             "name": "Pico",
             "includePath": [
-                "${workspaceFolder}/**"
+                "${workspaceFolder}/**",
+                "${workspaceFolder}/libs/LCD"
             ],
             "defines": [
                 "_DEBUG",

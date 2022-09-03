@@ -15,9 +15,20 @@ pico_sdk_init()
 
 add_executable(ground_station
     main.cpp
+    user_interface.cpp
 )
 
 add_subdirectory(libs/servo)
+add_subdirectory(libs/board)
+# add_subdirectory(libs/Icm20948)
+add_subdirectory(libs/lcd)
+# add_subdirectory(libs/Fonts)
+# add_subdirectory(libs/GUI)
+
+# include_directories(./libs/Config)
+# include_directories(./libs/GUI)
+# include_directories(./libs/Icm20948)
+# include_directories(./libs/LCD)
 
 pico_set_program_name(ground_station "GroundStation")
 pico_set_program_version(ground_station "0.1")
@@ -33,8 +44,16 @@ target_link_libraries(ground_station
     hardware_timer
     hardware_clocks
     hardware_pwm
+    hardware_spi
     
     servo
+    # LCD 
+    # Icm20948
+    # GUI
+    # Fonts
+    # Config
+    station-config
+    station-lcd
     )
 
 # create map/bin/hex/uf2 file in addition to ELF.

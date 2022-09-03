@@ -15,13 +15,13 @@ pico_sdk_init()
 
 add_executable(ground_station
     main.cpp
-    user_interface.cpp
 )
 
 add_subdirectory(libs/servo)
 add_subdirectory(libs/board)
 # add_subdirectory(libs/Icm20948)
 add_subdirectory(libs/lcd)
+add_subdirectory(libs/user_interface)
 # add_subdirectory(libs/Fonts)
 # add_subdirectory(libs/GUI)
 
@@ -54,6 +54,7 @@ target_link_libraries(ground_station
     # Config
     station-config
     station-lcd
+    user-interface
     )
 
 # create map/bin/hex/uf2 file in addition to ELF.

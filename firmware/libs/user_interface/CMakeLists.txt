@@ -26,4 +26,5 @@ set_target_properties(user-interface PROPERTIES LINKER_LANGUAGE CXX)
 target_link_libraries(user-interface PUBLIC 
     pico_stdlib
     station-lcd
+    lvgl::lvgl
     )

@@ -7,6 +7,10 @@
 
 int main() {
     boardStartup();
+    lv_init();
+    
+    
+
     UserInterface interface{};
     interface.Init();
     // setup_default_uart();

@@ -307,6 +307,15 @@ void LCD_1IN14_DisplayWindows(UWORD Xstart, UWORD Ystart, UWORD Xend, UWORD Yend
     DEV_Digital_Write(EPD_CS_PIN, 1);
 }
 
+void LCD_1IN14_DisplayArea(UWORD Xstart, UWORD Ystart, UWORD Xend, UWORD Yend, UWORD *Image)
+{
+    LCD_1IN14_SetWindows(Xstart, Ystart, Xend , Yend);
+    DEV_Digital_Write(EPD_DC_PIN, 1);
+    DEV_Digital_Write(EPD_CS_PIN, 0);
+    spi_write16_blocking(DISPLAY_SPI_PORT, Image, (Xend-Xstart)*(Yend-Ystart));
+    DEV_Digital_Write(EPD_CS_PIN, 1);
+}
+
 /******************************************************************************
 function :	Change the color of a point
 parameter:

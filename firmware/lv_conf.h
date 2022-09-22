@@ -19,8 +19,8 @@
 
 #include <stdint.h>
 
-#define LV_HOR_RES_MAX 135
-#define LV_VER_RES_MAX 240
+//#define LV_HOR_RES_MAX 135
+//#define LV_VER_RES_MAX 240
 
 /*====================
    COLOR SETTINGS

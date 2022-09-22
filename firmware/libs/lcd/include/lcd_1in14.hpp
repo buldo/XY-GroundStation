@@ -62,5 +62,6 @@ void LCD_1IN14_Clear(UWORD Color);
 void LCD_1IN14_Display(UWORD *Image);
 void LCD_1IN14_DisplayWindows(UWORD Xstart, UWORD Ystart, UWORD Xend, UWORD Yend, UWORD *Image);
 void LCD_1IN14_DisplayPoint(UWORD X, UWORD Y, UWORD Color);
+void LCD_1IN14_DisplayArea(UWORD Xstart, UWORD Ystart, UWORD Xend, UWORD Yend, UWORD *Image);
 
 #endif

@@ -92,31 +92,12 @@ bool UserInterface::repeatingTimerCallback(struct repeating_timer *t)
 void UserInterface::keyboard_read(lv_indev_drv_t * drv, lv_indev_data_t*data){
     UserInterface * self = static_cast<UserInterface*>(drv->user_data);
     uint32_t act_key = self->keypad_get_key();
-    if(act_key != 0) {
-        data->state = LV_INDEV_STATE_PR;
-
-        /*Translate the keys to LVGL control characters according to your key definitions*/
-        switch(act_key) {
-            case 1:
-                act_key = LV_KEY_NEXT;
-                break;
-            case 2:
-                act_key = LV_KEY_PREV;
-                break;
-            case 3:
-                act_key = LV_KEY_LEFT;
-                break;
-            case 4:
-                act_key = LV_KEY_RIGHT;
-                break;
-            case 5:
-                act_key = LV_KEY_ENTER;
-                break;
-        }
-
+    if(act_key != 0)
+    {
         self->last_key = act_key;
     }
-    else {
+    else
+    {
         data->state = LV_INDEV_STATE_REL;
     }
 
@@ -133,4 +114,6 @@ uint32_t UserInterface::keypad_get_key()
             return key.lvglKey;
         }
     }
+
+    return 0;
 }

@@ -48,14 +48,8 @@ int UserInterface::Init()
     inputDevice = lv_indev_drv_register(&inputDeviceDriver);
     /* Input device init END */
 
-    lv_obj_t * label1 = lv_label_create(lv_scr_act());
-    lv_label_set_long_mode(label1, LV_LABEL_LONG_WRAP);     /*Break the long lines*/
-    lv_label_set_recolor(label1, true);                      /*Enable re-coloring by commands in the text*/
-    lv_label_set_text(label1, "#0000ff Re-color# #ff00ff words# #ff0000 of a# label, align the lines to the center "
-                      "and wrap long text automatically.");
-    lv_obj_set_width(label1, 150);  /*Set smaller width to make the lines wrap*/
-    lv_obj_set_style_text_align(label1, LV_TEXT_ALIGN_CENTER, 0);
-    lv_obj_align(label1, LV_ALIGN_CENTER, 0, -40);
+    mainScreen.Init();
+    mainScreen.Load(inputDevice);
 
     return 0;
 }
@@ -95,6 +89,7 @@ void UserInterface::keyboard_read(lv_indev_drv_t * drv, lv_indev_data_t*data){
     if(act_key != 0)
     {
         self->inputDeviceLastKey = act_key;
+        data->state = LV_INDEV_STATE_PR;
     }
     else
     {

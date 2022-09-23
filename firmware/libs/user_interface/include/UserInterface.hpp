@@ -2,6 +2,7 @@
 #define USER_INTERFACE_H_
 
 #include "KeypadKey.hpp"
+#include "MainScreen.hpp"
 
 #include "pico/stdlib.h"
 #include "lvgl.h"
@@ -37,6 +38,10 @@ private:
         KeypadKey{ 17, LV_KEY_END },
     };
     /* Input device END */
+
+    /* Screens START */
+    MainScreen mainScreen;
+    /* Screens END */
 
 public:
     UserInterface(/* args */);

@@ -10,7 +10,9 @@ add_library(user-interface::user-interface ALIAS user-interface)
 set(sources
     include/UserInterface.hpp
     include/KeypadKey.hpp
+    include/MainScreen.hpp
     src/UserInterface.cpp
+    src/MainScreen.cpp
     )
 source_group(TREE "${CMAKE_CURRENT_SOURCE_DIR}" FILES ${sources})
 

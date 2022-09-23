@@ -1,4 +1,4 @@
-#include "user_interface.hpp"
+#include "UserInterface.hpp"
 #include "hardware/timer.h"
 #include "board_startup.hpp"
 #include "lcd_1in14.hpp"
@@ -10,7 +10,6 @@ UserInterface::UserInterface(/* args */)
 UserInterface::~UserInterface()
 {
 }
-typedef void (*flush_cb_t)(_lv_disp_drv_t *, lv_area_t *, lv_color_t *);
 
 int UserInterface::Init() 
 {
@@ -22,7 +21,7 @@ int UserInterface::Init()
         gpio_pull_up(key.pin);
     }
 
-    /* Init LCD */
+    /* Display device init START */
     busy_wait_ms(100);
     DEV_SET_PWM(50);
     LCD_1IN14_Init(HORIZONTAL);
@@ -30,24 +29,25 @@ int UserInterface::Init()
 
     add_repeating_timer_ms(lv_tick_value, &UserInterface::repeatingTimerCallback, this, &timer);
     lv_init();
-    lv_disp_draw_buf_init(&disp_buf, buf_1, buf_2, width*10);
+    lv_disp_draw_buf_init(&displayBuffer, displayBuffer1, displayBuffer2, width*10);
 
-              /*A variable to hold the drivers. Must be static or global.*/
-    lv_disp_drv_init(&disp_drv);            /*Basic initialization*/
-    disp_drv.user_data = this;
-    disp_drv.draw_buf = &disp_buf;          /*Set an initialized buffer*/
-    disp_drv.flush_cb = &UserInterface::my_flush_cb;        /*Set a flush callback to draw to the display*/
-    disp_drv.hor_res = width;                 /*Set the horizontal resolution in pixels*/
-    disp_drv.ver_res = height;
-    
-    disp = lv_disp_drv_register(&disp_drv);
+    lv_disp_drv_init(&displayDriver);
+    displayDriver.user_data = this;
+    displayDriver.draw_buf = &displayBuffer;
+    displayDriver.flush_cb = &UserInterface::my_flush_cb;
+    displayDriver.hor_res = width;
+    displayDriver.ver_res = height;
+    displayDevice = lv_disp_drv_register(&displayDriver);
+    /* Display device init END */
 
-    lv_indev_drv_init(&indev_drv);
-    indev_drv.user_data = this;
-    indev_drv.type = LV_INDEV_TYPE_KEYPAD;
-    indev_drv.read_cb = &UserInterface::keyboard_read;
-    my_indev = lv_indev_drv_register(&indev_drv);
-    
+    /* Input device init START */
+    lv_indev_drv_init(&inputDeviceDriver);
+    inputDeviceDriver.user_data = this;
+    inputDeviceDriver.type = LV_INDEV_TYPE_KEYPAD;
+    inputDeviceDriver.read_cb = &UserInterface::keyboard_read;
+    inputDevice = lv_indev_drv_register(&inputDeviceDriver);
+    /* Input device init END */
+
     lv_obj_t * label1 = lv_label_create(lv_scr_act());
     lv_label_set_long_mode(label1, LV_LABEL_LONG_WRAP);     /*Break the long lines*/
     lv_label_set_recolor(label1, true);                      /*Enable re-coloring by commands in the text*/
@@ -94,14 +94,14 @@ void UserInterface::keyboard_read(lv_indev_drv_t * drv, lv_indev_data_t*data){
     uint32_t act_key = self->keypad_get_key();
     if(act_key != 0)
     {
-        self->last_key = act_key;
+        self->inputDeviceLastKey = act_key;
     }
     else
     {
         data->state = LV_INDEV_STATE_REL;
     }
 
-    data->key = self->last_key;
+    data->key = self->inputDeviceLastKey;
 }
 
 uint32_t UserInterface::keypad_get_key()

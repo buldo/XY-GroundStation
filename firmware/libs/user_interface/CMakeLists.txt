@@ -8,8 +8,9 @@ add_library(user-interface) # initialized below
 add_library(user-interface::user-interface ALIAS user-interface)
 
 set(sources
-    include/user_interface.hpp
-    src/user_interface.cpp
+    include/UserInterface.hpp
+    include/KeypadKey.hpp
+    src/UserInterface.cpp
     )
 source_group(TREE "${CMAKE_CURRENT_SOURCE_DIR}" FILES ${sources})
 

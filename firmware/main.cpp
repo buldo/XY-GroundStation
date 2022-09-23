@@ -2,7 +2,7 @@
 #include "pico/stdlib.h"
 
 #include "ServoState.hpp"
-#include "user_interface.hpp"
+#include "UserInterface.hpp"
 #include "board_startup.hpp"
 
 int main() {

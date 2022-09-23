@@ -1,6 +1,8 @@
 #ifndef USER_INTERFACE_H_
 #define USER_INTERFACE_H_
 
+#include "KeypadKey.hpp"
+
 #include "pico/stdlib.h"
 #include "lvgl.h"
 #include <array>
@@ -8,28 +10,22 @@
 class UserInterface
 {
 private:
-
-    struct KeypadKey
-    {
-        uint pin;
-        uint32_t lvglKey;
-    };    
-
+    /* Output device START*/
     static const int width = 240;
     static const int height = 135;
     const int lv_tick_value = 5;
     repeating_timer timer;
-
-    lv_disp_draw_buf_t disp_buf;
-    lv_color_t buf_1[width * 10];
-    lv_color_t buf_2[width * 10];
-    lv_disp_drv_t disp_drv;
-    lv_disp_t * disp;
+    lv_disp_draw_buf_t displayBuffer;
+    lv_color_t displayBuffer1[width * 10];
+    lv_color_t displayBuffer2[width * 10];
+    lv_disp_drv_t displayDriver;
+    lv_disp_t * displayDevice;
+    /* Output device END*/
 
     /* Input device START */
-    lv_indev_drv_t indev_drv;
-    lv_indev_t * my_indev;
-    uint32_t last_key = 0;
+    lv_indev_drv_t inputDeviceDriver;
+    lv_indev_t * inputDevice;
+    uint32_t inputDeviceLastKey = 0;
     std::array<KeypadKey, 7> keypadKeys = 
     {
         KeypadKey{  2, LV_KEY_UP },
@@ -41,6 +37,7 @@ private:
         KeypadKey{ 17, LV_KEY_END },
     };
     /* Input device END */
+
 public:
     UserInterface(/* args */);
     ~UserInterface();

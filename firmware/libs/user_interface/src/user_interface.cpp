@@ -14,9 +14,17 @@ typedef void (*flush_cb_t)(_lv_disp_drv_t *, lv_area_t *, lv_color_t *);
 
 int UserInterface::Init() 
 {
+    /* Buttons gpio init */
+    for (const auto& key : keypadKeys)
+    {
+        gpio_init(key.pin);
+        gpio_set_dir(key.pin, GPIO_IN);
+        gpio_pull_up(key.pin);
+    }
+
+    /* Init LCD */
     busy_wait_ms(100);
     DEV_SET_PWM(50);
-    // /* LCD Init */
     LCD_1IN14_Init(HORIZONTAL);
     LCD_1IN14_Clear(0x001F);
 
@@ -34,7 +42,11 @@ int UserInterface::Init()
     
     disp = lv_disp_drv_register(&disp_drv);
 
-
+    lv_indev_drv_init(&indev_drv);
+    indev_drv.user_data = this;
+    indev_drv.type = LV_INDEV_TYPE_KEYPAD;
+    indev_drv.read_cb = &UserInterface::keyboard_read;
+    my_indev = lv_indev_drv_register(&indev_drv);
     
     lv_obj_t * label1 = lv_label_create(lv_scr_act());
     lv_label_set_long_mode(label1, LV_LABEL_LONG_WRAP);     /*Break the long lines*/
@@ -75,4 +87,50 @@ bool UserInterface::repeatingTimerCallback(struct repeating_timer *t)
     lv_tick_inc(self->lv_tick_value);
     lv_timer_handler();
     return true;
+}
+
+void UserInterface::keyboard_read(lv_indev_drv_t * drv, lv_indev_data_t*data){
+    UserInterface * self = static_cast<UserInterface*>(drv->user_data);
+    uint32_t act_key = self->keypad_get_key();
+    if(act_key != 0) {
+        data->state = LV_INDEV_STATE_PR;
+
+        /*Translate the keys to LVGL control characters according to your key definitions*/
+        switch(act_key) {
+            case 1:
+                act_key = LV_KEY_NEXT;
+                break;
+            case 2:
+                act_key = LV_KEY_PREV;
+                break;
+            case 3:
+                act_key = LV_KEY_LEFT;
+                break;
+            case 4:
+                act_key = LV_KEY_RIGHT;
+                break;
+            case 5:
+                act_key = LV_KEY_ENTER;
+                break;
+        }
+
+        self->last_key = act_key;
+    }
+    else {
+        data->state = LV_INDEV_STATE_REL;
+    }
+
+    data->key = self->last_key;
+}
+
+uint32_t UserInterface::keypad_get_key()
+{
+    for (const auto& key : keypadKeys)
+    {
+        auto currentVal = gpio_get(key.pin);
+        if(currentVal == false)
+        {
+            return key.lvglKey;
+        }
+    }
 }

@@ -1,37 +1,9 @@
-/*****************************************************************************
-* | File        :   LCD_1in14.C
-* | Function    :   test Demo
-* | Info        :
-*----------------
-* |	This version:   V1.0
-* | Date        :   2021-03-16
-* | Info        :   
-#
-# Permission is hereby granted, free of charge, to any person obtaining a copy
-# of this software and associated documnetation files (the "Software"), to deal
-# in the Software without restriction, including without limitation the rights
-# to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-# copies of the Software, and to permit persons to  whom the Software is
-# furished to do so, subject to the following conditions:
-#
-# The above copyright notice and this permission notice shall be included in
-# all copies or substantial portions of the Software.
-#
-# THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-# IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-# FITNESS OR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-# AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-# LIABILITY WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-# OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
-# THE SOFTWARE.
-#
-******************************************************************************/
-#include "lcd_1in14.hpp"
-#include "board_startup.hpp"
-#include "pin_definitions.hpp"
+#include "LCD_1in14.hpp"
 
-#include <stdlib.h>		//itoa()
+
+#include <stdlib.h>
 #include <stdio.h>
+#include "pin_definitions.hpp"
 
 LCD_1IN14_ATTRIBUTES LCD_1IN14;
 
@@ -42,11 +14,11 @@ parameter:
 ******************************************************************************/
 static void LCD_1IN14_Reset(void)
 {
-    DEV_Digital_Write(EPD_RST_PIN, 1);
+    DEV_Digital_Write(LCD_RST_PIN, 1);
     DEV_Delay_ms(100);
-    DEV_Digital_Write(EPD_RST_PIN, 0);
+    DEV_Digital_Write(LCD_RST_PIN, 0);
     DEV_Delay_ms(100);
-    DEV_Digital_Write(EPD_RST_PIN, 1);
+    DEV_Digital_Write(LCD_RST_PIN, 1);
     DEV_Delay_ms(100);
 }
 
@@ -57,10 +29,10 @@ parameter:
 ******************************************************************************/
 static void LCD_1IN14_SendCommand(UBYTE Reg)
 {
-    DEV_Digital_Write(EPD_DC_PIN, 0);
-    DEV_Digital_Write(EPD_CS_PIN, 0);
+    DEV_Digital_Write(LCD_DC_PIN, 0);
+    DEV_Digital_Write(LCD_CS_PIN, 0);
     DEV_SPI_WriteByte(Reg);
-    DEV_Digital_Write(EPD_CS_PIN, 1);
+    DEV_Digital_Write(LCD_CS_PIN, 1);
 }
 
 /******************************************************************************
@@ -70,10 +42,10 @@ parameter:
 ******************************************************************************/
 static void LCD_1IN14_SendData_8Bit(UBYTE Data)
 {
-    DEV_Digital_Write(EPD_DC_PIN, 1);
-    DEV_Digital_Write(EPD_CS_PIN, 0);
+    DEV_Digital_Write(LCD_DC_PIN, 1);
+    DEV_Digital_Write(LCD_CS_PIN, 0);
     DEV_SPI_WriteByte(Data);
-    DEV_Digital_Write(EPD_CS_PIN, 1);
+    DEV_Digital_Write(LCD_CS_PIN, 1);
 }
 
 /******************************************************************************
@@ -83,11 +55,11 @@ parameter:
 ******************************************************************************/
 static void LCD_1IN14_SendData_16Bit(UWORD Data)
 {
-    DEV_Digital_Write(EPD_DC_PIN, 1);
-    DEV_Digital_Write(EPD_CS_PIN, 0);
+    DEV_Digital_Write(LCD_DC_PIN, 1);
+    DEV_Digital_Write(LCD_CS_PIN, 0);
     DEV_SPI_WriteByte((Data >> 8) & 0xFF);
     DEV_SPI_WriteByte(Data & 0xFF);
-    DEV_Digital_Write(EPD_CS_PIN, 1);
+    DEV_Digital_Write(LCD_CS_PIN, 1);
 }
 
 /******************************************************************************
@@ -246,8 +218,8 @@ parameter:
 ******************************************************************************/
 void LCD_1IN14_Clear(UWORD Color)
 {
-    UWORD j,i;
-    UWORD Image[LCD_1IN14.WIDTH*LCD_1IN14.HEIGHT];
+    uint16_t j,i;
+    uint16_t Image[LCD_1IN14.WIDTH*LCD_1IN14.HEIGHT];
     
     Color = ((Color<<8)&0xff00)|(Color>>8);
    
@@ -256,13 +228,13 @@ void LCD_1IN14_Clear(UWORD Color)
     }
     
     LCD_1IN14_SetWindows(0, 0, LCD_1IN14.WIDTH, LCD_1IN14.HEIGHT);
-    DEV_Digital_Write(EPD_DC_PIN, 1);
-    DEV_Digital_Write(EPD_CS_PIN, 0);
+    DEV_Digital_Write(LCD_DC_PIN, 1);
+    DEV_Digital_Write(LCD_CS_PIN, 0);
     // printf("HEIGHT %d, WIDTH %d\r\n",LCD_1IN14.HEIGHT,LCD_1IN14.WIDTH);
     for(j = 0; j < LCD_1IN14.HEIGHT; j++){
         DEV_SPI_Write_nByte((uint8_t *)&Image[j*LCD_1IN14.WIDTH], LCD_1IN14.WIDTH*2);
     }
-    DEV_Digital_Write(EPD_CS_PIN, 1);
+    DEV_Digital_Write(LCD_CS_PIN, 1);
 }
 
 /******************************************************************************
@@ -273,24 +245,15 @@ void LCD_1IN14_Display(UWORD *Image)
 {
     UWORD j;
     LCD_1IN14_SetWindows(0, 0, LCD_1IN14.WIDTH, LCD_1IN14.HEIGHT);
-    DEV_Digital_Write(EPD_DC_PIN, 1);
-    DEV_Digital_Write(EPD_CS_PIN, 0);
+    DEV_Digital_Write(LCD_DC_PIN, 1);
+    DEV_Digital_Write(LCD_CS_PIN, 0);
     for (j = 0; j < LCD_1IN14.HEIGHT; j++) {
         DEV_SPI_Write_nByte((uint8_t *)&Image[j*LCD_1IN14.WIDTH], LCD_1IN14.WIDTH*2);
     }
-    DEV_Digital_Write(EPD_CS_PIN, 1);
+    DEV_Digital_Write(LCD_CS_PIN, 1);
     LCD_1IN14_SendCommand(0x29);
 }
 
-/******************************************************************************
-function :	Sends the image buffer in RAM to displays
-parameter:
-		Xstart 	:   X direction Start coordinates
-		Ystart  :   Y direction Start coordinates
-		Xend    :   X direction end coordinates
-		Yend    :   Y direction end coordinates
-		Image	:	Written content 
-******************************************************************************/
 void LCD_1IN14_DisplayWindows(UWORD Xstart, UWORD Ystart, UWORD Xend, UWORD Yend, UWORD *Image)
 {
     // display
@@ -298,36 +261,37 @@ void LCD_1IN14_DisplayWindows(UWORD Xstart, UWORD Ystart, UWORD Xend, UWORD Yend
 
     UWORD j;
     LCD_1IN14_SetWindows(Xstart, Ystart, Xend , Yend);
-    DEV_Digital_Write(EPD_DC_PIN, 1);
-    DEV_Digital_Write(EPD_CS_PIN, 0);
+    DEV_Digital_Write(LCD_DC_PIN, 1);
+    DEV_Digital_Write(LCD_CS_PIN, 0);
     for (j = Ystart; j < Yend - 1; j++) {
         Addr = Xstart + j * LCD_1IN14.WIDTH ;
         DEV_SPI_Write_nByte((uint8_t *)&Image[Addr], (Xend-Xstart)*2);
     }
-    DEV_Digital_Write(EPD_CS_PIN, 1);
+    DEV_Digital_Write(LCD_CS_PIN, 1);
 }
 
-void LCD_1IN14_DisplayArea(UWORD Xstart, UWORD Ystart, UWORD Xend, UWORD Yend, UWORD *Image)
-{
-    for(size_t y = Ystart; y <= Yend; y++) 
-    {
-        for(size_t x = Xstart; x <= Xend; x++) 
-        {
-            LCD_1IN14_DisplayPoint(x,y, *Image);
-            Image++;
-        }
-    }
-}
-
-/******************************************************************************
-function :	Change the color of a point
-parameter:
-		X 		:   X coordinates
-		Y  		:   Y coordinates
-		Color	:	Color
-******************************************************************************/
 void LCD_1IN14_DisplayPoint(UWORD X, UWORD Y, UWORD Color)
 {
     LCD_1IN14_SetWindows(X,Y,X,Y);
     LCD_1IN14_SendData_16Bit(Color);
+}
+
+void  Handler_1IN14_LCD(int signo)
+{
+}
+
+void LCD_1IN14_DisplayArea(uint16_t Xstart, uint16_t Ystart, uint16_t Xend, uint16_t Yend, uint16_t *Image)
+{
+    auto height = Yend - Ystart;
+    auto width = Xend - Xstart;
+    LCD_1IN14_SetWindows(Xstart, Ystart, Xend , Yend);
+    DEV_Digital_Write(LCD_DC_PIN, 1);
+    DEV_Digital_Write(LCD_CS_PIN, 0);
+    for (size_t y = 0; y < height; y++)
+    {
+        spi_write_blocking(DISPLAY_SPI_PORT, (uint8_t*)Image, 2 * width * height);
+        Image += width;
+    }
+
+    DEV_Digital_Write(LCD_CS_PIN, 1);
 }

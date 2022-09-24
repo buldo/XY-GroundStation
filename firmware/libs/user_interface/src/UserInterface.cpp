@@ -69,20 +69,46 @@ void UserInterface::my_flush_cb(lv_disp_drv_t * disp_drv, const lv_area_t * area
 {
     UserInterface * self = static_cast<UserInterface*>(disp_drv->user_data);
     
-    uint16_t buffer[(area->x2-area->x1+1)*(area->y2-area->y1+1)];
-    uint16_t* bf = buffer;
-    for(size_t y = area->y1; y <= area->y2; y++)
+    uint16_t hh = area->y2 - area->y1;
+    uint16_t ww  = area->x2 - area->x1;
+
+    uint16_t image[width*height];
+    // for(size_t y = 0; y < hh; y++)
+    // {
+    //     for(size_t x = 0; x < ww; x++)
+    //     {
+    //         buffer[y*ww+x] = color_p[y*ww+x].full;
+    //     }
+    // }
+
+    for(size_t y = area->y1; y <= area->y2; y++) 
     {
-        for(size_t x = area->x1; x <= area->x2; x++)
+        for(size_t x = area->x1; x <= area->x2; x++) 
         {
-            *bf = color_p->full;
+            image[ x - area->x1 + ( y - area->y1 ) * width] = color_p->full;
+            //LCD_1IN14_DisplayPoint(x,y, color_p->full);
             color_p++;
-            bf++;
         }
     }
 
-    bf = buffer;
-    LCD_1IN14_DisplayArea(area->x1, area->y1, area->x2, area->y2, bf);
+    
+    for(size_t y = area->y1; y <= area->y2; y++) 
+    {
+        for(size_t x = area->x1; x <= area->x2; x++) 
+        {
+            LCD_1IN14_DisplayPoint(x,y, image[ x - area->x1 + ( y - area->y1 ) * width]);
+        }
+    }
+
+    // for(size_t y = 0; y < hh; y++)
+    // {
+    //     for(size_t x = 0; x <ww; x++)
+    //     {
+    //         image[width * y + area->x1 + x] = color_p[y*ww+x].full;
+    //     }
+    // }
+
+    //LCD_1IN14_DisplayWindows(area->x1, area->y1, area->x2, area->y2, image);
     
     lv_disp_flush_ready(disp_drv);
 }

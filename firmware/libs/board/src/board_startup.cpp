@@ -43,25 +43,25 @@ void boardStartup()
     stdio_init_all();
 
     // SPI Config
-    spi_init(DISPLAY_SPI_PORT, 25000000);
-    gpio_set_function(EPD_CLK_PIN, GPIO_FUNC_SPI);
-    gpio_set_function(EPD_MOSI_PIN, GPIO_FUNC_SPI);
+    spi_init(DISPLAY_SPI_PORT, 1000*1000);
+    gpio_set_function(LCD_CLK_PIN, GPIO_FUNC_SPI);
+    gpio_set_function(LCD_MOSI_PIN, GPIO_FUNC_SPI);
     
     // GPIO Config
-    initPin(EPD_RST_PIN, GPIO_OUT);
-    initPin(EPD_DC_PIN, GPIO_OUT);
-    initPin(EPD_CS_PIN, GPIO_OUT);
-    initPin(EPD_BL_PIN, GPIO_OUT);
+    initPin(LCD_RST_PIN, GPIO_OUT);
+    initPin(LCD_DC_PIN, GPIO_OUT);
+    initPin(LCD_CS_PIN, GPIO_OUT);
+    initPin(LCD_BL_PIN, GPIO_OUT);
     //initPin(EPD_CLK_PIN, GPIO_OUT);
     //initPin(EPD_MOSI_PIN, GPIO_OUT);
 
-    gpio_put(EPD_CS_PIN, 1);
-    gpio_put(EPD_DC_PIN, 0);
-    gpio_put(EPD_BL_PIN, 1);
+    gpio_put(LCD_CS_PIN, 1);
+    gpio_put(LCD_DC_PIN, 0);
+    gpio_put(LCD_BL_PIN, 1);
     
     // PWM Config
-    gpio_set_function(EPD_BL_PIN, GPIO_FUNC_PWM);
-    slice_num = pwm_gpio_to_slice_num(EPD_BL_PIN);
+    gpio_set_function(LCD_BL_PIN, GPIO_FUNC_PWM);
+    slice_num = pwm_gpio_to_slice_num(LCD_BL_PIN);
     pwm_set_wrap(slice_num, 100);
     pwm_set_chan_level(slice_num, PWM_CHAN_B, 1);
     pwm_set_clkdiv(slice_num,50);

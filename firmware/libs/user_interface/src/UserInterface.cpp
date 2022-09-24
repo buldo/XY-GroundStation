@@ -68,32 +68,24 @@ void UserInterface::activateSettingsScreen()
 
 void UserInterface::my_flush_cb(lv_disp_drv_t * disp_drv, const lv_area_t * area, lv_color16_t * color_p)
 {
-    UserInterface * self = static_cast<UserInterface*>(disp_drv->user_data);
-    
-    // uint16_t hh = area->y2 - area->y1;
-    // uint16_t ww  = area->x2 - area->x1;
+    auto hh = area->y2 - area->y1 + 1;
+    auto ww = area->x2 - area->x1 + 1;
+    uint16_t image[ww*hh];
 
-    uint16_t image[width*height];
-
-    for(size_t y = area->y1; y <= area->y2; y++) 
+    for(size_t y = 0; y <hh; y++) 
     {
-        size_t lineStartIndex = width * area->y1 + ( y - area->y1 ) * width;
-        int a = 0;
-        for(size_t x = area->x1; x <= area->x2; x++) 
+        size_t lineStartIndex = ww * y;
+        for(size_t x = 0; x < ww; x++) 
         {
-            size_t index = lineStartIndex + x - area->x1;
+            size_t index = lineStartIndex + x;
             auto color = color_p->full;
             image[ index ] = std::byteswap(color);
-            //LCD_1IN14_DisplayPoint(x,y, color_p->full);
-            a++;
             color_p++;
         }
-        int b =0;
     }
 
-    LCD_1IN14_DisplayWindows(area->x1, area->y1, area->x2, area->y2, image);
-    //LCD_1IN14_Display(image);
-    
+    LCD_1IN14_DisplayArea(area->x1, area->y1, area->x2, area->y2, image);
+
     lv_disp_flush_ready(disp_drv);
 }
 

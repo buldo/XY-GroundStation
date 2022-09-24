@@ -286,16 +286,20 @@ void  Handler_1IN14_LCD(int signo)
 
 void LCD_1IN14_DisplayArea(uint16_t Xstart, uint16_t Ystart, uint16_t Xend, uint16_t Yend, uint16_t *Image)
 {
-    auto height = Yend - Ystart;
-    auto width = Xend - Xstart;
+    auto height = Yend - Ystart + 1;
+    auto width = Xend - Xstart + 1;
+
+    // display
+    size_t Addr = 0;
+
+    UWORD j;
     LCD_1IN14_SetWindows(Xstart, Ystart, Xend , Yend);
     DEV_Digital_Write(LCD_DC_PIN, 1);
     DEV_Digital_Write(LCD_CS_PIN, 0);
-    for (size_t y = 0; y < height; y++)
-    {
-        spi_write_blocking(DISPLAY_SPI_PORT, (uint8_t*)Image, 2 * width);
-        Image += width;
+    for (size_t j = 0; j < height; j++) {
+        Addr = j * width;
+        auto a = spi_write_blocking(DISPLAY_SPI_PORT, (uint8_t *)&Image[Addr], (width)*2);
+        a++;
     }
-
     DEV_Digital_Write(LCD_CS_PIN, 1);
 }

@@ -43,7 +43,7 @@ void boardStartup()
     stdio_init_all();
 
     // SPI Config
-    spi_init(DISPLAY_SPI_PORT, 10000 * 1000);
+    spi_init(DISPLAY_SPI_PORT, 25000000);
     gpio_set_function(EPD_CLK_PIN, GPIO_FUNC_SPI);
     gpio_set_function(EPD_MOSI_PIN, GPIO_FUNC_SPI);
     

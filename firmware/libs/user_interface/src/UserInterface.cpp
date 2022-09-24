@@ -85,20 +85,24 @@ void UserInterface::my_flush_cb(lv_disp_drv_t * disp_drv, const lv_area_t * area
     {
         for(size_t x = area->x1; x <= area->x2; x++) 
         {
-            image[ x - area->x1 + ( y - area->y1 ) * width] = color_p->full;
+            image[ x - area->x1 + ( y - area->y1 ) * width + width * area->y1] = color_p->full;
             //LCD_1IN14_DisplayPoint(x,y, color_p->full);
             color_p++;
         }
     }
 
+    // for (size_t i = 0; i < hh; i++)
+    // {
+    //     LCD_1IN14_DisplayArea(area->x1, area ->y1+i, area->x1, area ->y1+i+1, image);
+    // }
     
-    for(size_t y = area->y1; y <= area->y2; y++) 
-    {
-        for(size_t x = area->x1; x <= area->x2; x++) 
-        {
-            LCD_1IN14_DisplayPoint(x,y, image[ x - area->x1 + ( y - area->y1 ) * width]);
-        }
-    }
+    // for(size_t y = area->y1; y <= area->y2; y++) 
+    // {
+    //     for(size_t x = area->x1; x <= area->x2; x++) 
+    //     {
+    //         LCD_1IN14_DisplayPoint(x,y, image[ x - area->x1 + ( y - area->y1 ) * width]);
+    //     }
+    // }
 
     // for(size_t y = 0; y < hh; y++)
     // {
@@ -108,7 +112,7 @@ void UserInterface::my_flush_cb(lv_disp_drv_t * disp_drv, const lv_area_t * area
     //     }
     // }
 
-    //LCD_1IN14_DisplayWindows(area->x1, area->y1, area->x2, area->y2, image);
+    LCD_1IN14_Display(image);
     
     lv_disp_flush_ready(disp_drv);
 }

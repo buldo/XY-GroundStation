@@ -248,7 +248,8 @@ void LCD_1IN14_Display(UWORD *Image)
     DEV_Digital_Write(LCD_DC_PIN, 1);
     DEV_Digital_Write(LCD_CS_PIN, 0);
     for (j = 0; j < LCD_1IN14.HEIGHT; j++) {
-        DEV_SPI_Write_nByte((uint8_t *)&Image[j*LCD_1IN14.WIDTH], LCD_1IN14.WIDTH*2);
+        auto a = spi_write_blocking(DISPLAY_SPI_PORT, (uint8_t *)&Image[j*LCD_1IN14.WIDTH], LCD_1IN14.WIDTH*2);
+        a++;
     }
     DEV_Digital_Write(LCD_CS_PIN, 1);
     LCD_1IN14_SendCommand(0x29);

@@ -3,11 +3,13 @@
 
 #include "KeypadKey.hpp"
 #include "MainScreen.hpp"
+#include "SettingsScreen.hpp"
 
 #include "pin_definitions.hpp"
 #include "pico/stdlib.h"
 #include "lvgl.h"
 #include <array>
+#include <functional>
 
 class UserInterface
 {
@@ -42,10 +44,11 @@ private:
 
     /* Screens START */
     MainScreen mainScreen;
+    SettingsScreen settingsScreen;
     /* Screens END */
 
 public:
-    UserInterface(/* args */);
+    UserInterface();
     ~UserInterface();
     int Init();
 private:
@@ -54,6 +57,7 @@ private:
     static void keyboard_read(lv_indev_drv_t * drv, lv_indev_data_t*data);
 
     uint32_t keypad_get_key();
+    void activateSettingsScreen();
 };
 
 #endif // USER_INTERFACE_H_

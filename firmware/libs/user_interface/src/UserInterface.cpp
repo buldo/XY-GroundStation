@@ -48,10 +48,21 @@ int UserInterface::Init()
     inputDevice = lv_indev_drv_register(&inputDeviceDriver);
     /* Input device init END */
 
-    mainScreen.Init();
+    auto activateSettingsScreenCallback = [this]()
+    {
+        activateSettingsScreen();
+    };
+    mainScreen.Init(activateSettingsScreenCallback);
     mainScreen.Load(inputDevice);
 
+    settingsScreen.Init();
+
     return 0;
+}
+
+void UserInterface::activateSettingsScreen()
+{
+    settingsScreen.Load(inputDevice);
 }
 
 void UserInterface::my_flush_cb(lv_disp_drv_t * disp_drv, const lv_area_t * area, lv_color16_t * color_p)
@@ -69,9 +80,6 @@ void UserInterface::my_flush_cb(lv_disp_drv_t * disp_drv, const lv_area_t * area
             color_p++;
         }
     }
-
-    /* IMPORTANT!!!
-     * Inform the graphics library that you are ready with the flushing*/
     lv_disp_flush_ready(disp_drv);
 }
 

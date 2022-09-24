@@ -68,18 +68,22 @@ void UserInterface::activateSettingsScreen()
 void UserInterface::my_flush_cb(lv_disp_drv_t * disp_drv, const lv_area_t * area, lv_color16_t * color_p)
 {
     UserInterface * self = static_cast<UserInterface*>(disp_drv->user_data);
-    /*The most simple case (but also the slowest) to put all pixels to the screen one-by-one
-     *`put_px` is just an example, it needs to be implemented by you.*/
     
-    //LCD_1IN14_DisplayArea(area->x1, area->y1, area->x2, area->y2, (uint16_t*)color_p);
-    
-    int32_t x, y;
-    for(y = area->y1; y <= area->y2; y++) {
-        for(x = area->x1; x <= area->x2; x++) {
-            LCD_1IN14_DisplayPoint(x,y,  color_p->full);
+    uint16_t buffer[(area->x2-area->x1+1)*(area->y2-area->y1+1)];
+    uint16_t* bf = buffer;
+    for(size_t y = area->y1; y <= area->y2; y++)
+    {
+        for(size_t x = area->x1; x <= area->x2; x++)
+        {
+            *bf = color_p->full;
             color_p++;
+            bf++;
         }
     }
+
+    bf = buffer;
+    LCD_1IN14_DisplayArea(area->x1, area->y1, area->x2, area->y2, bf);
+    
     lv_disp_flush_ready(disp_drv);
 }
 

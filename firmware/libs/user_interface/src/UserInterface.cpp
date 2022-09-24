@@ -29,7 +29,7 @@ int UserInterface::Init()
 
     add_repeating_timer_ms(lv_tick_value, &UserInterface::repeatingTimerCallback, this, &timer);
     lv_init();
-    lv_disp_draw_buf_init(&displayBuffer, displayBuffer1, displayBuffer2, width*10);
+    lv_disp_draw_buf_init(&displayBuffer, displayBuffer1, NULL, width*height);
 
     lv_disp_drv_init(&displayDriver);
     displayDriver.user_data = this;

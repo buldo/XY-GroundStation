@@ -2,6 +2,7 @@
 #include "hardware/timer.h"
 #include "board_startup.hpp"
 #include "lcd_1in14.hpp"
+#include <bit>
 
 UserInterface::UserInterface(/* args */)
 {
@@ -69,50 +70,29 @@ void UserInterface::my_flush_cb(lv_disp_drv_t * disp_drv, const lv_area_t * area
 {
     UserInterface * self = static_cast<UserInterface*>(disp_drv->user_data);
     
-    uint16_t hh = area->y2 - area->y1;
-    uint16_t ww  = area->x2 - area->x1;
+    // uint16_t hh = area->y2 - area->y1;
+    // uint16_t ww  = area->x2 - area->x1;
 
     uint16_t image[width*height];
-    // for(size_t y = 0; y < hh; y++)
-    // {
-    //     for(size_t x = 0; x < ww; x++)
-    //     {
-    //         buffer[y*ww+x] = color_p[y*ww+x].full;
-    //     }
-    // }
 
     for(size_t y = area->y1; y <= area->y2; y++) 
     {
+        size_t lineStartIndex = width * area->y1 + ( y - area->y1 ) * width;
+        int a = 0;
         for(size_t x = area->x1; x <= area->x2; x++) 
         {
-            image[ x - area->x1 + ( y - area->y1 ) * width + width * area->y1] = color_p->full;
+            size_t index = lineStartIndex + x - area->x1;
+            auto color = color_p->full;
+            image[ index ] = std::byteswap(color);
             //LCD_1IN14_DisplayPoint(x,y, color_p->full);
+            a++;
             color_p++;
         }
+        int b =0;
     }
 
-    // for (size_t i = 0; i < hh; i++)
-    // {
-    //     LCD_1IN14_DisplayArea(area->x1, area ->y1+i, area->x1, area ->y1+i+1, image);
-    // }
-    
-    // for(size_t y = area->y1; y <= area->y2; y++) 
-    // {
-    //     for(size_t x = area->x1; x <= area->x2; x++) 
-    //     {
-    //         LCD_1IN14_DisplayPoint(x,y, image[ x - area->x1 + ( y - area->y1 ) * width]);
-    //     }
-    // }
-
-    // for(size_t y = 0; y < hh; y++)
-    // {
-    //     for(size_t x = 0; x <ww; x++)
-    //     {
-    //         image[width * y + area->x1 + x] = color_p[y*ww+x].full;
-    //     }
-    // }
-
-    LCD_1IN14_Display(image);
+    LCD_1IN14_DisplayWindows(area->x1, area->y1, area->x2, area->y2, image);
+    //LCD_1IN14_Display(image);
     
     lv_disp_flush_ready(disp_drv);
 }

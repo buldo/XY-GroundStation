@@ -194,19 +194,17 @@ parameter:
 ********************************************************************************/
 void LCD_1IN14_SetWindows(UWORD Xstart, UWORD Ystart, UWORD Xend, UWORD Yend)
 {
-    UBYTE x,y;
-    if(LCD_1IN14.SCAN_DIR == HORIZONTAL){x=40;y=53;}
-    else{ x=52; y=40; }
+    UBYTE x =0,y=0;
+    x=40;y=53;
+    
     //set the X coordinates
     LCD_1IN14_SendCommand(0x2A);
-    
-    
     LCD_1IN14_SendData_16Bit(Xstart	+x);
-    LCD_1IN14_SendData_16Bit(Xend-1	+x);
+    LCD_1IN14_SendData_16Bit(Xend+x);
     //set the Y coordinates
     LCD_1IN14_SendCommand(0x2B);
     LCD_1IN14_SendData_16Bit(Ystart +y);
-    LCD_1IN14_SendData_16Bit(Yend-1	  +y);
+    LCD_1IN14_SendData_16Bit(Yend  +y);
 
     LCD_1IN14_SendCommand(0X2C);
     // printf("%d %d\r\n",x,y);
@@ -257,16 +255,21 @@ void LCD_1IN14_Display(UWORD *Image)
 
 void LCD_1IN14_DisplayWindows(UWORD Xstart, UWORD Ystart, UWORD Xend, UWORD Yend, UWORD *Image)
 {
+    auto height = Yend - Ystart + 1;
+    auto width = Xend - Xstart + 1;
+
     // display
-    UDOUBLE Addr = 0;
+    size_t Addr = 0;
 
     UWORD j;
     LCD_1IN14_SetWindows(Xstart, Ystart, Xend , Yend);
     DEV_Digital_Write(LCD_DC_PIN, 1);
     DEV_Digital_Write(LCD_CS_PIN, 0);
-    for (j = Ystart; j < Yend - 1; j++) {
-        Addr = Xstart + j * LCD_1IN14.WIDTH ;
-        DEV_SPI_Write_nByte((uint8_t *)&Image[Addr], (Xend-Xstart)*2);
+    for (size_t j = 0; j < height; j++) {
+        size_t lineStartIndex = LCD_1IN14.WIDTH * Ystart + j * LCD_1IN14.WIDTH;
+        Addr = Xstart + lineStartIndex ;
+        auto a = spi_write_blocking(DISPLAY_SPI_PORT, (uint8_t *)&Image[Addr], (width)*2);
+        a++;
     }
     DEV_Digital_Write(LCD_CS_PIN, 1);
 }
@@ -290,7 +293,7 @@ void LCD_1IN14_DisplayArea(uint16_t Xstart, uint16_t Ystart, uint16_t Xend, uint
     DEV_Digital_Write(LCD_CS_PIN, 0);
     for (size_t y = 0; y < height; y++)
     {
-        spi_write_blocking(DISPLAY_SPI_PORT, (uint8_t*)Image, 2 * width * height);
+        spi_write_blocking(DISPLAY_SPI_PORT, (uint8_t*)Image, 2 * width);
         Image += width;
     }
 

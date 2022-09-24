@@ -6,7 +6,7 @@ include(pico_sdk_import.cmake)
 
 project(ground_station C CXX ASM)
 set(CMAKE_C_STANDARD 11)
-set(CMAKE_CXX_STANDARD 17)
+set(CMAKE_CXX_STANDARD 23)
 
 # initialize the Raspberry Pi Pico SDK
 pico_sdk_init()

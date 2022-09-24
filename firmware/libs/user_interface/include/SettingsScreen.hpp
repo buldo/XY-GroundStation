@@ -6,9 +6,15 @@ class SettingsScreen
 {
 private:
     lv_obj_t * screen;
-    lv_obj_t * label;
-    lv_group_t * group;
-    /* data */
+
+    lv_group_t * menuGroup;
+    lv_obj_t * manualModeButton;
+    lv_obj_t * manualModeLabel;
+    lv_obj_t * configureRcModuleButton;
+    lv_obj_t * configureRcModuleLabel;
+    lv_obj_t * configureStationModuleButton;
+    lv_obj_t * configureStationModuleLabel;
+
 public:
     SettingsScreen(/* args */);
     ~SettingsScreen();
@@ -16,5 +22,5 @@ public:
     void Load(lv_indev_t * inputDevice);
 
 private:
-    static void screenEvent(lv_event_t * e);
+    static void menuEvent(lv_event_t * e);
 };

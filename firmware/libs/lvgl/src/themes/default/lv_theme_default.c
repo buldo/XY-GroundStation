@@ -1087,6 +1087,7 @@ static void theme_apply(lv_theme_t * th, lv_obj_t * obj)
         lv_obj_add_style(obj, &styles->bg_color_primary_muted, LV_STATE_PRESSED | LV_STATE_CHECKED);
         lv_obj_add_style(obj, &styles->bg_color_primary_muted, LV_STATE_CHECKED);
         lv_obj_add_style(obj, &styles->bg_color_primary, LV_STATE_FOCUS_KEY);
+        lv_obj_add_style(obj, &styles->outline_primary, LV_STATE_FOCUS_KEY);
     }
     else if(lv_obj_check_type(obj, &lv_menu_sidebar_header_cont_class) ||
             lv_obj_check_type(obj, &lv_menu_main_header_cont_class)) {

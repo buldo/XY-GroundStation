@@ -10,6 +10,7 @@
 #include "lvgl.h"
 #include <array>
 #include <functional>
+#include "Actuator.hpp"
 
 class UserInterface
 {
@@ -47,8 +48,9 @@ private:
     SettingsScreen settingsScreen;
     /* Screens END */
 
+    Actuator * actuator;
 public:
-    UserInterface();
+    UserInterface(Actuator * actuator);
     ~UserInterface();
     int Init();
 private:
@@ -58,6 +60,7 @@ private:
 
     uint32_t keypad_get_key();
     void activateSettingsScreen();
+    void activateMainScreen();
 };
 
 #endif // USER_INTERFACE_H_

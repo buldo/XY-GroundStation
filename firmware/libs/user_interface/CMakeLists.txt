@@ -32,4 +32,5 @@ target_link_libraries(user-interface PUBLIC
     pico_stdlib
     station-lcd
     lvgl::lvgl
+    actuator
     )

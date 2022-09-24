@@ -4,15 +4,16 @@
 #include "lcd_1in14.hpp"
 #include <bit>
 
-UserInterface::UserInterface(/* args */)
+UserInterface::UserInterface(Actuator * actuator)
 {
+    this->actuator = actuator;
 }
 
 UserInterface::~UserInterface()
 {
 }
 
-int UserInterface::Init() 
+int UserInterface::Init()
 {
     /* Buttons gpio init */
     for (const auto& key : keypadKeys)
@@ -56,7 +57,11 @@ int UserInterface::Init()
     mainScreen.Init(activateSettingsScreenCallback);
     mainScreen.Load(inputDevice);
 
-    settingsScreen.Init();
+    auto activateMainScreenCallback = [this]()
+    {
+        activateMainScreen();
+    };
+    settingsScreen.Init(activateMainScreenCallback);
 
     return 0;
 }
@@ -64,6 +69,11 @@ int UserInterface::Init()
 void UserInterface::activateSettingsScreen()
 {
     settingsScreen.Load(inputDevice);
+}
+
+void UserInterface::activateMainScreen()
+{
+    mainScreen.Load(inputDevice);
 }
 
 void UserInterface::my_flush_cb(lv_disp_drv_t * disp_drv, const lv_area_t * area, lv_color16_t * color_p)

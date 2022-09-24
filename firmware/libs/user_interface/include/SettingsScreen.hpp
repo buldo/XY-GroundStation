@@ -1,6 +1,7 @@
 #pragma once
 
 #include "lvgl.h"
+#include <functional>
 
 class SettingsScreen
 {
@@ -15,10 +16,11 @@ private:
     lv_obj_t * configureStationModuleButton;
     lv_obj_t * configureStationModuleLabel;
 
+    std::function<void(void)> goToMain;
 public:
     SettingsScreen(/* args */);
     ~SettingsScreen();
-    void Init();
+    void Init(std::function<void(void)> goToMainCallback);
     void Load(lv_indev_t * inputDevice);
 
 private:

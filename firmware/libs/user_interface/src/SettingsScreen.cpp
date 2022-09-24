@@ -9,8 +9,10 @@ SettingsScreen::~SettingsScreen()
 {
 }
 
-void SettingsScreen::Init()
+void SettingsScreen::Init(std::function<void(void)> goToMainCallback)
 {
+    goToMain = goToMainCallback;
+
     screen = lv_obj_create(NULL);
     lv_obj_clear_flag(screen, LV_OBJ_FLAG_SCROLLABLE);
     
@@ -53,6 +55,10 @@ void SettingsScreen::menuEvent(lv_event_t * e)
         if(key == LV_KEY_UP)
         {
             lv_group_focus_prev(self->menuGroup);
+        }
+        if(key == LV_KEY_ESC)
+        {
+            self->goToMain();
         }
     }
     if(event_code == LV_EVENT_PRESSED) {

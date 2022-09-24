@@ -18,7 +18,7 @@ add_executable(ground_station
     main.cpp
 )
 
-add_subdirectory(libs/servo)
+add_subdirectory(libs/actuator)
 add_subdirectory(libs/board)
 add_subdirectory(libs/lcd)
 add_subdirectory(libs/user_interface)
@@ -39,7 +39,7 @@ target_link_libraries(ground_station
     hardware_pwm
     hardware_spi
     
-    servo
+    actuator
     station-config
     station-lcd
     user-interface

@@ -57,11 +57,9 @@ int UserInterface::Init()
     mainScreen.Init(activateSettingsScreenCallback);
     mainScreen.Load(inputDevice);
 
-    auto activateMainScreenCallback = [this]()
-    {
-        activateMainScreen();
-    };
-    settingsScreen.Init(activateMainScreenCallback);
+    auto activateMainScreenCallback = [this]() { activateMainScreen(); };
+    auto activateManualScreenCallback = [this]() { activateManualScreen(); };
+    settingsScreen.Init(activateMainScreenCallback, activateManualScreenCallback);
 
     return 0;
 }
@@ -74,6 +72,11 @@ void UserInterface::activateSettingsScreen()
 void UserInterface::activateMainScreen()
 {
     mainScreen.Load(inputDevice);
+}
+
+void UserInterface::activateManualScreen()
+{
+    manualScreen.Load(inputDevice);
 }
 
 void UserInterface::my_flush_cb(lv_disp_drv_t * disp_drv, const lv_area_t * area, lv_color16_t * color_p)

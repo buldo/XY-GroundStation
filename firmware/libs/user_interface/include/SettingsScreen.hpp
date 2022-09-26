@@ -17,10 +17,13 @@ private:
     lv_obj_t * configureStationModuleLabel;
 
     std::function<void(void)> goToMain;
+    std::function<void(void)> goToManual;
 public:
     SettingsScreen(/* args */);
     ~SettingsScreen();
-    void Init(std::function<void(void)> goToMainCallback);
+    void Init(
+        std::function<void(void)> goToMainCallback,
+        std::function<void(void)> goToManualCallback);
     void Load(lv_indev_t * inputDevice);
 
 private:

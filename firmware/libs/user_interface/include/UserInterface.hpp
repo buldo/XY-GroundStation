@@ -46,6 +46,7 @@ private:
     /* Screens START */
     MainScreen mainScreen;
     SettingsScreen settingsScreen;
+    SettingsScreen manualScreen;
     /* Screens END */
 
     Actuator * actuator;
@@ -61,6 +62,7 @@ private:
     uint32_t keypad_get_key();
     void activateSettingsScreen();
     void activateMainScreen();
+    void activateManualScreen();
 };
 
 #endif // USER_INTERFACE_H_

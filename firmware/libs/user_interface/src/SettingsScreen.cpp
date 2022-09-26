@@ -9,9 +9,12 @@ SettingsScreen::~SettingsScreen()
 {
 }
 
-void SettingsScreen::Init(std::function<void(void)> goToMainCallback)
+void SettingsScreen::Init(
+    std::function<void(void)> goToMainCallback,
+    std::function<void(void)> goToManualCallback)
 {
     goToMain = goToMainCallback;
+    goToManual = goToManualCallback;
 
     screen = lv_obj_create(NULL);
     lv_obj_clear_flag(screen, LV_OBJ_FLAG_SCROLLABLE);
@@ -61,9 +64,8 @@ void SettingsScreen::menuEvent(lv_event_t * e)
             self->goToMain();
         }
     }
-    if(event_code == LV_EVENT_PRESSED) {
-        
-        //_ui_screen_change(ui_Screen1, LV_SCR_LOAD_ANIM_FADE_ON, 500, 0);
+    if(event_code == LV_EVENT_PRESSED && e->target == self->manualModeButton) {
+        self->goToManual();
     }
 }
 

@@ -1,7 +1,6 @@
 #include <stdio.h>
 #include "pico/stdlib.h"
 
-#include "ServoState.hpp"
 #include "UserInterface.hpp"
 #include "board_startup.hpp"
 #include "Actuator.hpp"

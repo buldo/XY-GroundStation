@@ -27,7 +27,7 @@ pico_set_program_name(ground_station "GroundStation")
 pico_set_program_version(ground_station "0.1")
 
 pico_enable_stdio_uart(ground_station 0)
-pico_enable_stdio_usb(ground_station 1)
+pico_enable_stdio_usb(ground_station 0)
 
 # Add pico_stdlib library which aggregates commonly used features
 target_link_libraries(ground_station 

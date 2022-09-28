@@ -24,7 +24,7 @@ public:
     Actuator(ServoController *servoController, int servo1Pin, int servo2Pin);
     ~Actuator();
     void SetManualMode(bool isManualModeOn);
-    void SetPosition(uint32_t az, uint32_t el);
+    void SetPosition(int32_t az, int32_t el);
     uint32_t GetAz();
     uint32_t GetEl();
 };

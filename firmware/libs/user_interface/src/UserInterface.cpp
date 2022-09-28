@@ -22,6 +22,7 @@ int UserInterface::Init()
     for (const auto& key : keypadKeys)
     {
         gpio_init(key.pin);
+        gpio_set_function(key.pin, GPIO_FUNC_NULL);
         gpio_set_dir(key.pin, GPIO_IN);
         gpio_pull_up(key.pin);
     }

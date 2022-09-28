@@ -40,7 +40,7 @@ void initPin(uint pin, bool out)
 
 void boardStartup()
 {
-    stdio_init_all();
+    //stdio_init_all();
 
     // SPI Config
     spi_init(DISPLAY_SPI_PORT, 125* 1000*1000);

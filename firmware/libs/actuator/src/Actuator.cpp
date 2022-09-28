@@ -7,6 +7,7 @@ Actuator::Actuator(ServoController *servoController, int servo1Pin, int servo2Pi
     this->servoController = servoController;
     this->servo1Pin = servo1Pin;
     this->servo2Pin = servo2Pin;
+    SetPosition(0,90);
 }
 
 Actuator::~Actuator()
@@ -28,7 +29,7 @@ uint32_t Actuator::GetEl()
     return el;
 }
 
-void Actuator::SetPosition(uint32_t az, uint32_t el)
+void Actuator::SetPosition(int32_t az, int32_t el)
 {
         if(el < 0)
         {

@@ -9,8 +9,10 @@ ManualModeScreen::~ManualModeScreen()
 {
 }
 
-void ManualModeScreen::Init()
+void ManualModeScreen::Init(std::function<void(void)> goToSettingsCallback)
 {
+    goToSettings = goToSettingsCallback;
+
     screen = lv_obj_create(NULL);
     lv_obj_clear_flag(screen, LV_OBJ_FLAG_SCROLLABLE);
     group = lv_group_create();
@@ -93,6 +95,10 @@ void ManualModeScreen::screenEvent(lv_event_t * e)
         if(key == LV_KEY_RIGHT)
         {
             az += 1;
+        }
+        if(key == LV_KEY_ESC)
+        {
+            self->goToSettings();
         }
 
         self->actuator->SetPosition(az, el);

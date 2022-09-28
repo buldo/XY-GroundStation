@@ -2,6 +2,7 @@
 
 #include "lvgl.h"
 #include "Actuator.hpp"
+#include <functional>
 
 class ManualModeScreen
 {
@@ -26,12 +27,14 @@ private:
     lv_obj_t * cell_1_1;
 
     Actuator * actuator;
+
+    std::function<void(void)> goToSettings;
 public:
     ManualModeScreen(Actuator * actuator);
     ~ManualModeScreen();
 
     void Load(lv_indev_t * inputDevice);
-    void Init();
+    void Init(std::function<void(void)> goToSettingsCallback);
     static void screenEvent(lv_event_t * e);
     void updateScreenValues();
 };

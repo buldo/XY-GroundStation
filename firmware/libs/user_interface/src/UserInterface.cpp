@@ -54,10 +54,7 @@ int UserInterface::Init()
     inputDevice = lv_indev_drv_register(&inputDeviceDriver);
     /* Input device init END */
 
-    auto activateSettingsScreenCallback = [this]()
-    {
-        activateSettingsScreen();
-    };
+    auto activateSettingsScreenCallback = [this]() { activateSettingsScreen(); };
     mainScreen->Init(activateSettingsScreenCallback);
     mainScreen->Load(inputDevice);
 
@@ -65,7 +62,7 @@ int UserInterface::Init()
     auto activateManualScreenCallback = [this]() { activateManualScreen(); };
     settingsScreen->Init(activateMainScreenCallback, activateManualScreenCallback);
 
-    manualScreen->Init();
+    manualScreen->Init(activateSettingsScreenCallback);
 
     return 0;
 }

@@ -4,6 +4,7 @@
 #include "KeypadKey.hpp"
 #include "MainScreen.hpp"
 #include "SettingsScreen.hpp"
+#include "ManualModeScreen.hpp"
 
 #include "pin_definitions.hpp"
 #include "pico/stdlib.h"
@@ -21,8 +22,7 @@ private:
     const int lv_tick_value = 5;
     repeating_timer timer;
     lv_disp_draw_buf_t displayBuffer;
-    lv_color_t displayBuffer1[width * 10];
-    lv_color_t displayBuffer2[width * 10];
+    lv_color_t displayBuffer1[width * 14];
     lv_disp_drv_t displayDriver;
     lv_disp_t * displayDevice;
     /* Output device END*/
@@ -44,9 +44,9 @@ private:
     /* Input device END */
 
     /* Screens START */
-    MainScreen mainScreen;
-    SettingsScreen settingsScreen;
-    SettingsScreen manualScreen;
+    MainScreen * mainScreen;
+    SettingsScreen * settingsScreen;
+    ManualModeScreen * manualScreen;
     /* Screens END */
 
     Actuator * actuator;

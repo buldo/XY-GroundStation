@@ -15,10 +15,10 @@ void SettingsScreen::Init(
 {
     goToMain = goToMainCallback;
     goToManual = goToManualCallback;
-
+    
     screen = lv_obj_create(NULL);
     lv_obj_clear_flag(screen, LV_OBJ_FLAG_SCROLLABLE);
-    
+
     menuGroup = lv_group_create();
     menuGroup->editing = 0;
     manualModeButton = lv_btn_create(screen);

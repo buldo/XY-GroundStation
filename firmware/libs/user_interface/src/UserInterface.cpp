@@ -7,6 +7,9 @@
 UserInterface::UserInterface(Actuator * actuator)
 {
     this->actuator = actuator;
+    settingsScreen = new SettingsScreen();
+    mainScreen = new MainScreen();
+    manualScreen = new ManualModeScreen(actuator);
 }
 
 UserInterface::~UserInterface()
@@ -31,7 +34,7 @@ int UserInterface::Init()
 
     add_repeating_timer_ms(lv_tick_value, &UserInterface::repeatingTimerCallback, this, &timer);
     lv_init();
-    lv_disp_draw_buf_init(&displayBuffer, displayBuffer1, NULL, width*10);
+    lv_disp_draw_buf_init(&displayBuffer, displayBuffer1, NULL, width*14);
 
     lv_disp_drv_init(&displayDriver);
     displayDriver.user_data = this;
@@ -54,29 +57,31 @@ int UserInterface::Init()
     {
         activateSettingsScreen();
     };
-    mainScreen.Init(activateSettingsScreenCallback);
-    mainScreen.Load(inputDevice);
+    mainScreen->Init(activateSettingsScreenCallback);
+    mainScreen->Load(inputDevice);
 
     auto activateMainScreenCallback = [this]() { activateMainScreen(); };
     auto activateManualScreenCallback = [this]() { activateManualScreen(); };
-    settingsScreen.Init(activateMainScreenCallback, activateManualScreenCallback);
+    settingsScreen->Init(activateMainScreenCallback, activateManualScreenCallback);
+
+    manualScreen->Init();
 
     return 0;
 }
 
 void UserInterface::activateSettingsScreen()
 {
-    settingsScreen.Load(inputDevice);
+    settingsScreen->Load(inputDevice);
 }
 
 void UserInterface::activateMainScreen()
 {
-    mainScreen.Load(inputDevice);
+    mainScreen->Load(inputDevice);
 }
 
 void UserInterface::activateManualScreen()
 {
-    manualScreen.Load(inputDevice);
+    manualScreen->Load(inputDevice);
 }
 
 void UserInterface::my_flush_cb(lv_disp_drv_t * disp_drv, const lv_area_t * area, lv_color16_t * color_p)

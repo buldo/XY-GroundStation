@@ -1,3 +1,5 @@
+#define PICO_HEAP_SIZE _u(0x1600)
+
 #include <stdio.h>
 #include "pico/stdlib.h"
 
@@ -11,8 +13,8 @@ int main() {
     
     ServoController servoController{};
     Actuator actuator(&servoController, SERVO1_PIN, SERVO2_PIN);
-    UserInterface interface(&actuator);
-    interface.Init();
+    UserInterface* interface = new UserInterface(&actuator);
+    interface->Init();
     // setup_default_uart();
     printf("Hello, world!\n");
     while(true){}

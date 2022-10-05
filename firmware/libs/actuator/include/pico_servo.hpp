@@ -3,6 +3,7 @@
 class ServoController
 {
 private:
+    const float servoMaxAngle = 270;
     uint _minUs = 500;
     uint _maxUs = 2500;
     uint _min;
@@ -13,7 +14,7 @@ private:
 public:
     ServoController();
     void EnableForPin(const uint gpio);
-    void SetAngle(const uint gpio, const uint8_t angle);
+    void SetAngle(const uint gpio, const float angle);
 
     ~ServoController();
 };

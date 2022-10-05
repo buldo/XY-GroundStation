@@ -7,6 +7,8 @@ Actuator::Actuator(ServoController *servoController, int servo1Pin, int servo2Pi
     this->servoController = servoController;
     this->servo1Pin = servo1Pin;
     this->servo2Pin = servo2Pin;
+    servoController->EnableForPin(servo1Pin);
+    servoController->EnableForPin(servo2Pin);
     SetPosition(0,90);
 }
 
@@ -62,4 +64,12 @@ void Actuator::SetPosition(int32_t az, int32_t el)
 
         auto theta2Rad = asinl( sinl(azRad) * cosl(elRad) );
         theta2 = (theta2Rad ) * 180 / M_PI + 90;
+
+        applyPosition();
+}
+
+void Actuator::applyPosition()
+{
+    servoController->SetAngle(servo1Pin, theta2);
+    servoController->SetAngle(servo2Pin, theta1);
 }

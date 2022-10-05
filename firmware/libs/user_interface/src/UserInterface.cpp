@@ -10,6 +10,7 @@ UserInterface::UserInterface(Actuator * actuator)
     settingsScreen = new SettingsScreen();
     mainScreen = new MainScreen();
     manualScreen = new ManualModeScreen(actuator);
+    directServoScreen = new DirectServoModeScreen(actuator);
 }
 
 UserInterface::~UserInterface()
@@ -60,9 +61,12 @@ int UserInterface::Init()
 
     auto activateMainScreenCallback = [this]() { activateMainScreen(); };
     auto activateManualScreenCallback = [this]() { activateManualScreen(); };
-    settingsScreen->Init(activateMainScreenCallback, activateManualScreenCallback);
+    auto activateDirectScreenCallback = [this]() { activateDirectServoScreen(); };
+    settingsScreen->Init(activateMainScreenCallback, activateManualScreenCallback, activateDirectScreenCallback);
 
     manualScreen->Init(activateSettingsScreenCallback);
+
+    directServoScreen->Init(activateSettingsScreenCallback);
 
     return 0;
 }
@@ -80,6 +84,11 @@ void UserInterface::activateMainScreen()
 void UserInterface::activateManualScreen()
 {
     manualScreen->Load(inputDevice);
+}
+
+void UserInterface::activateDirectServoScreen()
+{
+    directServoScreen->Load(inputDevice);
 }
 
 void UserInterface::my_flush_cb(lv_disp_drv_t * disp_drv, const lv_area_t * area, lv_color16_t * color_p)

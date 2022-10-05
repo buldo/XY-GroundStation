@@ -5,6 +5,7 @@
 #include "MainScreen.hpp"
 #include "SettingsScreen.hpp"
 #include "ManualModeScreen.hpp"
+#include "DirectServoModeScreen.hpp"
 
 #include "pin_definitions.hpp"
 #include "pico/stdlib.h"
@@ -47,6 +48,7 @@ private:
     MainScreen * mainScreen;
     SettingsScreen * settingsScreen;
     ManualModeScreen * manualScreen;
+    DirectServoModeScreen * directServoScreen;
     /* Screens END */
 
     Actuator * actuator;
@@ -63,6 +65,7 @@ private:
     void activateSettingsScreen();
     void activateMainScreen();
     void activateManualScreen();
+    void activateDirectServoScreen();
 };
 
 #endif // USER_INTERFACE_H_

@@ -49,12 +49,12 @@ void ServoController::EnableForPin(const uint gpio)
     ++_slicesActive[slice];
 }
 
-void ServoController::SetAngle(const uint gpio, const uint8_t angle)
+void ServoController::SetAngle(const uint gpio, const float angle)
 {
     const uint8_t slice = pwm_gpio_to_slice_num(gpio);
     const uint8_t channel = pwm_gpio_to_channel(gpio);
 
-    uint val = (float)angle / 180.f * (_max - _min) + _min;
+    uint val = (float)angle / servoMaxAngle * (_max - _min) + _min;
 
     pwm_set_chan_level(slice, channel, val);
     pwm_set_enabled(slice, true);

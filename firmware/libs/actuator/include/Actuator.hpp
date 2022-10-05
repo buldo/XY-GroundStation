@@ -27,4 +27,5 @@ public:
     void SetPosition(int32_t az, int32_t el);
     uint32_t GetAz();
     uint32_t GetEl();
+    void applyPosition();
 };

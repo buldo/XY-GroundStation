@@ -16,7 +16,7 @@ void SettingsScreen::Init(
 {
     goToMain = goToMainCallback;
     goToManual = goToManualCallback;
-    goToDirect = goToDirect;
+    goToDirect = goToDirectCallback;
     
     screen = lv_obj_create(NULL);
     // lv_obj_clear_flag(screen, LV_OBJ_FLAG_SCROLLABLE);

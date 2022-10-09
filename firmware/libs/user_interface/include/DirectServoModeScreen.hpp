@@ -14,16 +14,16 @@ private:
     lv_coord_t row_dsc[3] = {LV_GRID_FR(1), LV_GRID_FR(1), LV_GRID_TEMPLATE_LAST};
     lv_obj_t * container;
 
-    lv_obj_t * labelBtmName;
+    lv_obj_t * labelTheta1Name;
     lv_obj_t * cell_0_0;
 
-    lv_obj_t * labelBtmValue;
+    lv_obj_t * labelTheta1Value;
     lv_obj_t * cell_0_1;
 
-    lv_obj_t * labelTopName;
+    lv_obj_t * labelTheta2Name;
     lv_obj_t * cell_1_0;
 
-    lv_obj_t * labelTopValue;
+    lv_obj_t * labelTheta2Value;
     lv_obj_t * cell_1_1;
 
     Actuator * actuator;
@@ -37,6 +37,7 @@ public:
     void Init(std::function<void(void)> goToSettingsCallback);
     static void screenEvent(lv_event_t * e);
     void updateScreenValues();
+    uint32_t fixValues(int32_t value);
 };
 
 

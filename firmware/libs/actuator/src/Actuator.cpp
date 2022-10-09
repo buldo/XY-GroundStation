@@ -4,11 +4,11 @@
 
 Actuator::Actuator(ServoController *servoController, int servo1Pin, int servo2Pin)
 {
-    this->servoController = servoController;
-    this->servo1Pin = servo1Pin;
-    this->servo2Pin = servo2Pin;
-    servoController->EnableForPin(servo1Pin);
-    servoController->EnableForPin(servo2Pin);
+    servoController_ = servoController;
+    servo1Pin_ = servo1Pin;
+    servo2Pin_ = servo2Pin;
+    servoController_->EnableForPin(servo1Pin);
+    servoController_->EnableForPin(servo2Pin);
     SetPosition(0,90);
 }
 
@@ -18,17 +18,34 @@ Actuator::~Actuator()
 
 void Actuator::SetManualMode(bool isManualModeOn)
 {
-    isInManualMode = isManualModeOn;
+    isInManualMode_ = isManualModeOn;
 }
 
 uint32_t Actuator::GetAz()
 {
-    return az;
+    return az_;
 }
 
 uint32_t Actuator::GetEl()
 {
-    return el;
+    return el_;
+}
+
+uint32_t Actuator::GetTheta1()
+{
+    return theta1_;
+}
+
+uint32_t Actuator::GetTheta2()
+{
+    return theta2_;
+}
+
+void Actuator::SetServoPosition(uint32_t theta1, uint32_t theta2)
+{
+    theta1_ = theta1;
+    theta2_ = theta2;
+    applyPosition();
 }
 
 void Actuator::SetPosition(int32_t az, int32_t el)
@@ -53,23 +70,23 @@ void Actuator::SetPosition(int32_t az, int32_t el)
             az = 360 - az;
         }
 
-        this->az = az;
-        this->el = el;
+        this->az_ = az;
+        this->el_ = el;
 
         auto azRad = az * (M_PI / 180);
         auto elRad = el * (M_PI / 180);
 
         auto theta1Rad = atanl( (cosl(azRad) * cosl(elRad)) / (sinl(elRad)) );
-        theta1 = theta1Rad * 180 / M_PI + 90;
+        theta1_ = theta1Rad * 180 / M_PI + 90;
 
         auto theta2Rad = asinl( sinl(azRad) * cosl(elRad) );
-        theta2 = (theta2Rad ) * 180 / M_PI + 90;
+        theta2_ = (theta2Rad ) * 180 / M_PI + 90;
 
         applyPosition();
 }
 
 void Actuator::applyPosition()
 {
-    servoController->SetAngle(servo1Pin, theta2);
-    servoController->SetAngle(servo2Pin, theta1);
+    servoController_->SetAngle(servo1Pin_, theta2_);
+    servoController_->SetAngle(servo2Pin_, theta1_);
 }
